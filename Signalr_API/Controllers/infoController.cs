@@ -114,21 +114,23 @@ namespace Signalr_API.Controllers
         [HttpPost]
         [Route("saveresultout")]
         public async Task<IActionResult> saveresultout([FromBody] ResultOutModel model)
-        {
-
-            model.sectionId = 1;
-            model.set = "1531.13";
-            model.setvalue = "13843.13";
-            model.number = "33";
-
+        {           
 
             string sectionname = string.Empty;
             int sectioncount = 0;
 
+            if (MemoryCacheHelper.Exists("2dresultout" + model.sectionId.ToString()))
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = "you had published this section winner before" });
+            }
+
+            DateTimeOffset expiration = DateTime.Now.AddHours(10);
+            MemoryCacheHelper.Add("2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
+
             DateTime editDate = DateTime.Now;
             if (editDate.Date != model.for_date_time.Date)
             {
-                return StatusCode(StatusCodes.Status202Accepted, new Response { Status = "Error", Message = "Please choose correct date" });
+                return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = "Please choose correct date" });
             }
 
             if (!ModelState.IsValid)
@@ -212,9 +214,7 @@ namespace Signalr_API.Controllers
 
             }         
 
-          
-
-                return StatusCode(StatusCodes.Status304NotModified, new Response { Status = "Error", Message = "Result failed!" });
+            return StatusCode(StatusCodes.Status304NotModified, new Response { Status = "Error", Message = "Result failed!" });
         }
 
     }
