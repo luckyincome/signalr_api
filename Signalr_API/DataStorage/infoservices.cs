@@ -64,6 +64,9 @@ namespace Signalr_API.DataStorage
             parameters.Add(new ParameterInfo() { ParameterName = "section", ParameterValue = section });            
             return new SqlHelper().GetRecords<Live2dLogInfo>("pro_find_2dlog", parameters);
         }
+
+
+
     }
 
 

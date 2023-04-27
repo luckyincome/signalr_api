@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,30 @@ using System.Threading.Tasks;
 
 namespace Signalr_API.Models
 {
+
+    public class ResultOutModel
+    {
+        [Required(ErrorMessage = "Set is required")]
+        public string set { get; set; }
+
+        [Required(ErrorMessage = "Value is required")]
+        public string setvalue { get; set; }
+
+
+        [Required(ErrorMessage = "Number is required")]
+        public string number { get; set; }
+    
+        public DateTime for_date_time { get; set; }
+        
+        public int sectionId { get; set; }       
+
+        [Required(ErrorMessage = "Signature is required")]
+        public string signature { get; set; }
+
+        public string adminkey { get; set; }
+    }
+
+
     public class TwoDResultData
     {
         public string set_1200 { get; set; }
