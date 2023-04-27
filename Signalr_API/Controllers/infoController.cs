@@ -116,11 +116,11 @@ namespace Signalr_API.Controllers
         public async Task<IActionResult> saveresultout([FromBody] ResultOutModel model)
         {
 
-            //model.sectionId = 1;
-            //model.set = "1531.13";
-            //model.setvalue = "13843.13";
-            //model.number = "33";
-            
+            model.sectionId = 1;
+            model.set = "1531.13";
+            model.setvalue = "13843.13";
+            model.number = "33";
+
 
             string sectionname = string.Empty;
             int sectioncount = 0;
@@ -176,40 +176,45 @@ namespace Signalr_API.Controllers
                     await _infoService.UpdateTwoDLiveResult(twoDResults);
 
 
-                    //Live2dLogInfo live2DLogInfo = new Live2dLogInfo(); 
-                    //live2DLogInfo = await _live2DLogController.FindLive2dLogByManual(sectionname, true);
+                    Live2dLogInfo logmodel = new Live2dLogInfo();
+                    logmodel = await _infoService.FindLive2dLogByManual(sectionname, true);                    
 
-                    //if (live2DLogInfo != null)
-                    //{
-                    //    live2DLogInfo.set = textBox1.Text;
-                    //    live2DLogInfo.value = textBox5.Text;
-                    //    live2DLogInfo.result = textBox2.Text;
-                    //    live2DLogInfo.date = selectItem.toDisplayDateTime;
+                    if (logmodel != null)
+                    {
+                        logmodel.set = model.set;
+                        logmodel.value = model.setvalue;
+                        logmodel.result = model.number.ToString();
+                        logmodel.date = liveItem.toDisplayDateTime;
 
-                    //    //updtae existing data
-                    //    await _live2DLogController.UpdateLive2dLog(live2DLogInfo);
-                    //}
+                        //updtae existing data
+                        await _infoService.UpdateLive2dLog(logmodel);
+                    }
                     ////manual-insert-beforeReference
-                    //if (live2DLogInfo == null)
-                    //{
-                    //    live2DLogInfo = new Live2dLogInfo();
-                    //    live2DLogInfo.set = textBox1.Text;
-                    //    live2DLogInfo.value = textBox5.Text;
-                    //    live2DLogInfo.result = textBox2.Text;
-                    //    live2DLogInfo.isReference = true;
-                    //    live2DLogInfo.section = selectItem.section;
-                    //    live2DLogInfo.date = selectItem.toDisplayDateTime;
+                    if (logmodel == null)
+                    {
+                        logmodel = new Live2dLogInfo();
+                        logmodel.set = model.set;
+                        logmodel.value = model.setvalue;
+                        logmodel.result = model.number.ToString();
+                        logmodel.isReference = true;
+                        logmodel.section = sectionname;
+                        logmodel.date = liveItem.toDisplayDateTime;
 
-                    //    //inser new row log
-                    //    await _live2DLogController.InsertLive2dLog(live2DLogInfo);
-                    //}
+                        //inser new row log
+                        await _infoService.InsertLive2dLog(logmodel);
+                    }
+
+                    Get();
+
+
+                    return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Result success!" });
                 }
 
             }         
 
           
 
-                return Ok();
+                return StatusCode(StatusCodes.Status304NotModified, new Response { Status = "Error", Message = "Result failed!" });
         }
 
     }

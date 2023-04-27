@@ -15,5 +15,12 @@ namespace Signalr_API.DataStorage
 
         List<Live2dLogInfo> Get2dlog(string section);
 
+
+        Task<Live2dLogInfo> FindLive2dLogByManual(string section, bool isReference);
+
+        Task<bool> InsertLive2dLog(Live2dLogInfo model);
+
+
+        Task<bool> UpdateLive2dLog(Live2dLogInfo model);
     }
 }
