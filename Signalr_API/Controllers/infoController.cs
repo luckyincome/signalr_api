@@ -121,7 +121,7 @@ namespace Signalr_API.Controllers
 
             if (MemoryCacheHelper.Exists("2dresultout" + model.sectionId.ToString()))
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = "you had published this section winner before" });
+                return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section winner before" });
             }
 
             DateTimeOffset expiration = DateTime.Now.AddHours(10);
@@ -130,7 +130,7 @@ namespace Signalr_API.Controllers
             DateTime editDate = DateTime.Now;
             if (editDate.Date != model.for_date_time.Date)
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = "Please choose correct date" });
+                return StatusCode(StatusCodes.Status303SeeOther, new Response { Status = "Error", Message = "Please choose correct date" });
             }
 
             if (!ModelState.IsValid)
