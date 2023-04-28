@@ -119,13 +119,13 @@ namespace Signalr_API.Controllers
             string sectionname = string.Empty;
             int sectioncount = 0;
 
-            if (MemoryCacheHelper.Exists("2dresultout" + model.sectionId.ToString()))
+            if (MemoryCacheHelper.Exists("api2dresultout" + model.sectionId.ToString()))
             {
-                return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section winner before" });
+                return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section result before" });
             }
 
             DateTimeOffset expiration = DateTime.Now.AddHours(10);
-            MemoryCacheHelper.Add("2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
+            MemoryCacheHelper.Add("api2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
 
             DateTime editDate = DateTime.Now;
             if (editDate.Date != model.for_date_time.Date)

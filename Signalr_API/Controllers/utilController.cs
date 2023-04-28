@@ -18,14 +18,14 @@ namespace Signalr_API.Controllers
         [HttpGet]
         public async System.Threading.Tasks.Task<string> getpwd(String pwd)
         {
-            if (pwd != null && pwd == "clearcacheall")
+            if (pwd != null && pwd == "apiclearcacheall")
             {
                 MemoryCacheHelper.Clear();
                 return null;
             }
-            if (pwd != null && pwd.Contains("clearcache_"))
+            if (pwd != null && pwd.Contains("apiclearcache_"))
             {
-                string keyName = pwd.Replace("clearcache_", "");
+                string keyName = pwd.Replace("apiclearcache_", "");
                 MemoryCacheHelper.Remove(keyName);
                 return null;
             }
