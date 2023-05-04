@@ -217,5 +217,25 @@ namespace Signalr_API.Controllers
             return StatusCode(StatusCodes.Status304NotModified, new Response { Status = "Error", Message = "Result failed!" });
         }
 
+
+
+
+        [HttpGet]
+        [Route("resultbysection")]
+        public async Task<List<ResultList>> ResultBySection(string section,DateTime date)
+        {
+            List<ResultList> lst = new List<ResultList>();
+
+            var getLiveData = await _infoService.FindTowDLiveResultData("HWIbmlsHHr");
+            String changeData = getLiveData.data;
+
+            List<ResultList> _liveDatas = JsonConvert.DeserializeObject<List<ResultList>>(changeData);
+
+            ResultList liveItem = _liveDatas.Find(s => (date.Date == s.fromDateTime.Date && section == s.section));
+            if(liveItem != null) { lst.Add(liveItem); }           
+
+            return lst;
+        }
+
     }
 }

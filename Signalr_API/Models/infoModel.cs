@@ -32,6 +32,45 @@ namespace Signalr_API.Models
     }
 
 
+    public class ResultList
+    {
+
+        public ResultList()
+        {
+            this.section = "";            
+            set = "--";
+            value = "--";
+            result = "--";
+            isManual = true;
+            isDone = false;           
+        }
+        public string section { get; set; }
+        public string set { get; set; }
+        public string value { get; set; }
+        public string result { get; set; }
+        public bool isManual { get; set; }
+        public bool isDone { get; set; }
+        public String from { get; set; }
+        public String to { get; set; }
+        public String toDisplay { get; set; }
+
+        public DateTime fromDateTime { get; set; }
+
+        public DateTime toDateTime { get; set; }
+
+        public DateTime toDisplayDateTime { get; set; }
+
+        public DateTime showdatetime
+        {
+            get { return Convert.ToDateTime(this.fromDateTime.ToString("yyyy-MM-dd")); }
+        }
+
+        //public DateTime toDisplayDateTime
+        //{
+        //    get { return Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd") + " " + this.toDisplay); }
+        //}
+    }
+
     public class TwoDResultData
     {
         public string set_1200 { get; set; }
