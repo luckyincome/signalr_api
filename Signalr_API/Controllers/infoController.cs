@@ -113,19 +113,19 @@ namespace Signalr_API.Controllers
 
         [HttpPost]
         [Route("saveresultout")]
-        public async Task<IActionResult> saveresultout([FromBody] ResultOutModel model)
+        public async Task<IActionResult> saveresultout([FromForm] ResultOutModel model)
         {           
 
             string sectionname = string.Empty;
             int sectioncount = 0;
 
-            if (MemoryCacheHelper.Exists("api2dresultout" + model.sectionId.ToString()))
-            {
-                return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section result before" });
-            }
+            ////if (MemoryCacheHelper.Exists("api2dresultout" + model.sectionId.ToString()))
+            ////{
+            ////    return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section result before" });
+            ////}
 
-            DateTimeOffset expiration = DateTime.Now.AddHours(10);
-            MemoryCacheHelper.Add("api2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
+            ////DateTimeOffset expiration = DateTime.Now.AddHours(10);
+            ////MemoryCacheHelper.Add("api2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
 
             DateTime editDate = DateTime.Now;
             if (editDate.Date != model.for_date_time.Date)
@@ -210,6 +210,10 @@ namespace Signalr_API.Controllers
 
 
                     return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Result success!" });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Success", Message = "Result already added!" });
                 }
 
             }         
