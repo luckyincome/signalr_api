@@ -11,21 +11,20 @@ namespace Signalr_API.Models
 
     public class ResultOutModel
     {
-        [Required(ErrorMessage = "Set is required")]
+        
         public string set { get; set; }
 
-        [Required(ErrorMessage = "Value is required")]
+        
         public string setvalue { get; set; }
 
-
-        [Required(ErrorMessage = "Number is required")]
+       
         public string number { get; set; }
     
         public DateTime for_date_time { get; set; }
         
         public int sectionId { get; set; }       
 
-        [Required(ErrorMessage = "Signature is required")]
+        
         public string signature { get; set; }
 
         public string adminkey { get; set; }

@@ -45,7 +45,8 @@ namespace Signalr_API
                     builder =>
                     {
                         builder.WithOrigins("http://localhost:4200", "https://www.demo.lucky2d.com", "https://www.lucky2d.com", 
-                            "https://demo.lucky2d.com", "https://lucky2d.com")
+                            "https://demo.lucky2d.com", "https://lucky2d.com", "https://admin.lucky2d.com", "https://www.admin.lucky2d.com",
+                            "https://sys.lucky2d.com", "https://www.sys.lucky2d.com")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowCredentials()
