@@ -72,6 +72,7 @@ namespace Signalr_API.Controllers
 
 
         [HttpGet]
+
         [Route("LastDataAsync")]
         public async Task<string> LastData()
         {
@@ -119,13 +120,13 @@ namespace Signalr_API.Controllers
             string sectionname = string.Empty;
             int sectioncount = 0;
 
-            ////if (MemoryCacheHelper.Exists("api2dresultout" + model.sectionId.ToString()))
-            ////{
-            ////    return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section result before" });
-            ////}
+            if (MemoryCacheHelper.Exists("api2dresultout" + model.sectionId.ToString()))
+            {
+                return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Error", Message = "you had published this section result before" });
+            }
 
-            ////DateTimeOffset expiration = DateTime.Now.AddHours(10);
-            ////MemoryCacheHelper.Add("api2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
+            DateTimeOffset expiration = DateTime.Now.AddHours(10);
+            MemoryCacheHelper.Add("api2dresultout" + model.sectionId.ToString(), "saveresultout", expiration);
 
             DateTime editDate = DateTime.Now;
             if (editDate.Date != model.for_date_time.Date)
@@ -153,67 +154,75 @@ namespace Signalr_API.Controllers
                 string changeData = getLiveData.data;
                 List<LiveData> _liveDatas = JsonConvert.DeserializeObject<List<LiveData>>(changeData);
                 LiveData liveItem = _liveDatas.Find(s => (sectionname == s.section && DateTime.Now.Date == s.fromDateTime.Date));//find current section
-                if (liveItem != null && liveItem.isDone == false)
+                if (liveItem != null)
                 {
-                    _liveDatas[sectioncount].set = model.set;
-                    _liveDatas[sectioncount].value = model.setvalue;
-                    _liveDatas[sectioncount].result = model.number;
-                    _liveDatas[sectioncount].isDone = true;
-
-                    var objectresult = JsonConvert.SerializeObject(_liveDatas); //Remark XXXX 
-
-                    TwoDLiveResult twoDResults = new TwoDLiveResult();
-                    twoDResults.data = objectresult; //from live data
-                    twoDResults.result = model.number;
-                    twoDResults.Set = model.set;
-                    twoDResults.Value = model.setvalue;
-                    twoDResults.updatedAt = DateTime.Now;
-                    twoDResults.createdAt = DateTime.Now;
-                    twoDResults.lastUpdateDate = DateTime.Now;
-                    twoDResults.objectId = getLiveData.objectId;
-                    twoDResults.adminKey = Guid.NewGuid().ToString();
-                    twoDResults.bakData = getLiveData.bakData;
-                    twoDResults.backupData = getLiveData.backupData;
-                    twoDResults.Key = getLiveData.Key;
-                    await _infoService.UpdateTwoDLiveResult(twoDResults);
-
-
-                    Live2dLogInfo logmodel = new Live2dLogInfo();
-                    logmodel = await _infoService.FindLive2dLogByManual(sectionname, true);                    
-
-                    if (logmodel != null)
+                    if(liveItem.isDone == false)
                     {
-                        logmodel.set = model.set;
-                        logmodel.value = model.setvalue;
-                        logmodel.result = model.number.ToString();
-                        logmodel.date = liveItem.toDisplayDateTime;
+                        _liveDatas[sectioncount].set = model.set;
+                        _liveDatas[sectioncount].value = model.setvalue;
+                        _liveDatas[sectioncount].result = model.number;
+                        _liveDatas[sectioncount].isDone = true;
 
-                        //updtae existing data
-                        await _infoService.UpdateLive2dLog(logmodel);
+                        var objectresult = JsonConvert.SerializeObject(_liveDatas); //Remark XXXX 
+
+                        TwoDLiveResult twoDResults = new TwoDLiveResult();
+                        twoDResults.data = objectresult; //from live data
+                        twoDResults.result = model.number;
+                        twoDResults.Set = model.set;
+                        twoDResults.Value = model.setvalue;
+                        twoDResults.updatedAt = DateTime.Now;
+                        twoDResults.createdAt = DateTime.Now;
+                        twoDResults.lastUpdateDate = DateTime.Now;
+                        twoDResults.objectId = getLiveData.objectId;
+                        twoDResults.adminKey = Guid.NewGuid().ToString();
+                        twoDResults.bakData = getLiveData.bakData;
+                        twoDResults.backupData = getLiveData.backupData;
+                        twoDResults.Key = getLiveData.Key;
+                        await _infoService.UpdateTwoDLiveResult(twoDResults);
+
+
+                        Live2dLogInfo logmodel = new Live2dLogInfo();
+                        logmodel = await _infoService.FindLive2dLogByManual(sectionname, true);
+
+                        if (logmodel != null)
+                        {
+                            logmodel.set = model.set;
+                            logmodel.value = model.setvalue;
+                            logmodel.result = model.number.ToString();
+                            logmodel.date = liveItem.toDisplayDateTime;
+
+                            //updtae existing data
+                            await _infoService.UpdateLive2dLog(logmodel);
+                        }
+                        ////manual-insert-beforeReference
+                        if (logmodel == null)
+                        {
+                            logmodel = new Live2dLogInfo();
+                            logmodel.set = model.set;
+                            logmodel.value = model.setvalue;
+                            logmodel.result = model.number.ToString();
+                            logmodel.isReference = true;
+                            logmodel.section = sectionname;
+                            logmodel.date = liveItem.toDisplayDateTime;
+
+                            //inser new row log
+                            await _infoService.InsertLive2dLog(logmodel);
+                        }
+
+                        Get();
+
+
+                        return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Result success!" });
                     }
-                    ////manual-insert-beforeReference
-                    if (logmodel == null)
+                    else
                     {
-                        logmodel = new Live2dLogInfo();
-                        logmodel.set = model.set;
-                        logmodel.value = model.setvalue;
-                        logmodel.result = model.number.ToString();
-                        logmodel.isReference = true;
-                        logmodel.section = sectionname;
-                        logmodel.date = liveItem.toDisplayDateTime;
-
-                        //inser new row log
-                        await _infoService.InsertLive2dLog(logmodel);
+                        return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Success", Message = "Result already added!" });
                     }
 
-                    Get();
-
-
-                    return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "Result success!" });
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Success", Message = "Result already added!" });
+                    return StatusCode(StatusCodes.Status301MovedPermanently, new Response { Status = "Success", Message = "There is no data for today!" });
                 }
 
             }         
