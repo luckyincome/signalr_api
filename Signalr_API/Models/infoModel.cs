@@ -228,7 +228,7 @@ namespace Signalr_API.Models
         public string result { get; set; }
         public string Key { get; set; }
         public string bakData { get; set; }
-
+        public string isService { get; set; }
     }
 
 

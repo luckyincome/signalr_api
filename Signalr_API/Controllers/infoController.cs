@@ -178,6 +178,8 @@ namespace Signalr_API.Controllers
                         twoDResults.bakData = getLiveData.bakData;
                         twoDResults.backupData = getLiveData.backupData;
                         twoDResults.Key = getLiveData.Key;
+                        twoDResults.isService = "Stop";
+
                         await _infoService.UpdateTwoDLiveResult(twoDResults);
 
 
