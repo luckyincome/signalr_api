@@ -145,9 +145,9 @@ namespace Signalr_API.Controllers
             }
             else
             {
-                if (model.sectionId == 1) { sectionname = "10:30 AM"; sectioncount = 0; }
+                if (model.sectionId == 1) { sectionname = "10:00 AM"; sectioncount = 0; }
                 else if (model.sectionId == 2) { sectionname = "12:01 PM"; sectioncount = 1; }
-                else if (model.sectionId == 3) { sectionname = "02:30 PM"; sectioncount = 2; }
+                else if (model.sectionId == 3) { sectionname = "02:00 PM"; sectioncount = 2; }
                 else if (model.sectionId == 4) { sectionname = "04:30 PM"; sectioncount = 3; }
 
                 var getLiveData = await _infoService.FindTowDLiveResultData("HWIbmlsHHr");
