@@ -250,6 +250,10 @@ namespace Signalr_API.Models
         public DateTime updateAt { get; set; }
 
         public DateTime date { get; set; }
+        public string dateStr
+        {
+            get { return date.ToString("yyyy-MM-dd hh:mm:ss"); }
+        }
 
         public bool isManual { get; set; }
 

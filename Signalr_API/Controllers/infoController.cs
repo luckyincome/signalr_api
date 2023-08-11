@@ -111,7 +111,6 @@ namespace Signalr_API.Controllers
 
         }
 
-
         [HttpPost]
         [Route("saveresultout")]
         public async Task<IActionResult> saveresultout([FromForm] ResultOutModel model)
@@ -145,9 +144,9 @@ namespace Signalr_API.Controllers
             }
             else
             {
-                if (model.sectionId == 1) { sectionname = "10:00 AM"; sectioncount = 0; }
+                if (model.sectionId == 1) { sectionname = "10:40 AM"; sectioncount = 0; }
                 else if (model.sectionId == 2) { sectionname = "12:01 PM"; sectioncount = 1; }
-                else if (model.sectionId == 3) { sectionname = "02:00 PM"; sectioncount = 2; }
+                else if (model.sectionId == 3) { sectionname = "02:40 PM"; sectioncount = 2; }
                 else if (model.sectionId == 4) { sectionname = "04:30 PM"; sectioncount = 3; }
 
                 var getLiveData = await _infoService.FindTowDLiveResultData("HWIbmlsHHr");
@@ -231,9 +230,6 @@ namespace Signalr_API.Controllers
 
             return StatusCode(StatusCodes.Status304NotModified, new Response { Status = "Error", Message = "Result failed!" });
         }
-
-
-
 
         [HttpGet]
         [Route("resultbysection")]
