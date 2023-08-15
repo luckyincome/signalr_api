@@ -54,6 +54,7 @@ namespace Signalr_API.DataStorage
                 parameters.Add(new ParameterInfo() { ParameterName = "bakData", ParameterValue = model.bakData });
 
                 parameters.Add(new ParameterInfo() { ParameterName = "isService", ParameterValue = model.isService });
+                parameters.Add(new ParameterInfo() { ParameterName = "oldGuid", ParameterValue = model.myguid });
 
                 result = new SqlHelper().ExecuteQuery("pro_update_TwoDLiveResultForAPI", parameters) > 0 ? true : false;
             });

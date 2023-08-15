@@ -178,8 +178,13 @@ namespace Signalr_API.Controllers
                         twoDResults.backupData = getLiveData.backupData;
                         twoDResults.Key = getLiveData.Key;
                         twoDResults.isService = "Stop";
-
-                        await _infoService.UpdateTwoDLiveResult(twoDResults);
+                        twoDResults.myguid = getLiveData.myguid;
+                        
+                        bool isupdate= await _infoService.UpdateTwoDLiveResult(twoDResults);
+                        if(!isupdate)
+                        {
+                            return StatusCode(StatusCodes.Status406NotAcceptable, new Response { Status = "Error", Message = "Result failed!" });
+                        }
 
 
                         Live2dLogInfo logmodel = new Live2dLogInfo();
